@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
 export const Overlay = () => {
-  const { languages, setLanguages, shown, setShown } = useSettings();
+  const { languages, setLanguages, shown, setShown, showConnected, setShowConnected } = useSettings();
 
   const { register, watch } = useForm({
     defaultValues: {

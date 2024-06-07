@@ -10,6 +10,8 @@ type SettingsState = {
   shown: string[];
   setShown: (shown: string[]) => void;
   shownStreamers: StreamerData[];
+  showConnected: boolean;
+  setShowConnected: (show: boolean) => void;
 };
 
 const SettingsContext = createContext<SettingsState | null>(null);
@@ -25,9 +27,10 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
   const [shown, setShown] = useState<string[]>(
     streamers.map((s) => s.streamer.twitch),
   );
+  const [showConnected, setShowConnected] = useState<boolean>(true);
 
   const shownStreamers = useMemo(() => {
-    let shownStreamers = streamers.filter((s) => s.online);
+    let shownStreamers = streamers.filter((s) => s.online && (s.onDipDeep || !showConnected));
 
     if (languages.length) {
       shownStreamers = shownStreamers.filter((s) =>
@@ -54,6 +57,8 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
         shownStreamers,
         shown,
         setShown,
+        showConnected,
+        setShowConnected
       }}
     >
       {children}

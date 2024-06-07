@@ -5,6 +5,7 @@ import { fetchStreamsData } from "./twitch";
 export type StreamerData = {
   streamer: Streamer;
   online: boolean;
+  onDipDeep: boolean;
   currentHeight: number;
 };
 
@@ -18,14 +19,15 @@ export async function fetchStreamersData(): Promise<StreamerData[]> {
   const result = [];
   for (const streamer of streamers) {
     const liveheight =
-      heights.find((h) => h.user_id === streamer.trackmania)?.height;
+      heights.find((h) => h.user_id === streamer.trackmania)?.height ?? 0;
 
-    if (!liveheight) continue;
+    const onDipDeep = Boolean(heights.find((h) => h.user_id === streamer.trackmania));
 
     result.push({
       streamer,
       online: !!streams.find((s) => s.user_login === streamer.twitch),
       // leaderboard: leaderboard.find((l) => l.wsid === streamer.trackmania),
+      onDipDeep,
       currentHeight: parseInt(liveheight.toFixed()),
     });
   }
