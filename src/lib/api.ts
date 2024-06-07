@@ -18,7 +18,9 @@ export async function fetchStreamersData(): Promise<StreamerData[]> {
   const result = [];
   for (const streamer of streamers) {
     const liveheight =
-      heights.find((h) => h.user_id === streamer.trackmania)?.height ?? 0;
+      heights.find((h) => h.user_id === streamer.trackmania)?.height;
+
+    if (!liveheight) continue;
 
     result.push({
       streamer,
